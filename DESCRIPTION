@@ -1,0 +1,22 @@
+Package: SeqGate
+Type: Package
+Title: Filtering of Lowly Expressed Features
+Version: 0.99.0
+Date: 2020-07-09
+Authors@R: c(
+    person("Christelle", "Reynès", email ="christelle.reynes@igf.cnrs.fr", role = c("aut")),
+    person("Stéphanie", "Rialle", email = "stephanie.rialle@mgx.cnrs.fr", role = c("aut","cre")))
+Description: Filtering of lowly expressed features (e.g. genes) is a common
+    step before performing statistical analysis, but an arbitrary threshold is
+    generally chosen. SeqGate implements a method that rationalize this step by
+    the analysis of the distibution of counts in replicate samples. The gate is
+    the threshold above which sequenced features can be considered as
+    confidently quantified.
+Encoding: UTF-8
+Imports: stats
+Suggests: testthat, edgeR, BiocStyle, knitr, rmarkdown
+License: GPL (>= 2.0)
+LazyData: no
+biocViews: DifferentialExpression, GeneExpression, Transcriptomics, Sequencing, 
+    RNASeq
+VignetteBuilder: knitr
