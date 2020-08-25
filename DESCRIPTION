@@ -19,4 +19,5 @@ License: GPL (>= 2.0)
 LazyData: no
 biocViews: DifferentialExpression, GeneExpression, Transcriptomics, Sequencing, 
     RNASeq
+BugReports: https://github.com/srialle/SeqGate/issues
 VignetteBuilder: knitr
