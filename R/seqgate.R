@@ -35,7 +35,7 @@ applySeqGate <- function(readCounts, conditions, prop0=NULL, percentile=NULL,
     prop0 <- checkAndDefineProp0(prop0, conditions)
     percentile <- checkAndDefinePercentile(percentile,conditions)
     checkPropUpThresh(propUpThresh)
-    ckeckForReplicates(conditions)
+    checkForReplicates(conditions)
     cat(getMessageWithParameters(prop0, percentile, propUpThresh))
 
     ## Getting the distribution of 'max' counts and computing threshold
@@ -83,24 +83,24 @@ checkReadCounts <- function(counts, conditions) {
             }
             if(i > length(isNum)){
                 counts <- as.matrix(counts)
-                cat("readCounts dataframe has been converted to a matrix.\n")
+                message("readCounts dataframe has been converted to a matrix.")
             }else{
-                stop("ERROR: readCounts contains non numeric columns. Please
-                provide a matrix of read counts.")
+                stop("readCounts contains non numeric columns. Please provide a 
+matrix of read counts.")
             }
         }else{
-            stop("ERROR: readCounts is not a matrix.")
+            stop("readCounts is not a matrix.")
         }
     }else{
         if(!is.numeric(counts)){
-            stop("ERROR: readCounts contains non numeric data. Please provide a 
-matrix of read counts.")
+            stop("readCounts contains non numeric data. Please provide a matrix 
+of read counts.")
         }
     }
     
     if (ncol(counts) != length(conditions)) {
-        stop("ERROR: The number of columns in the readCounts matrix must be
-equals to the number of elements in the conditions vector.")
+        stop("The number of columns in the readCounts matrix must be equals to 
+the number of elements in the conditions vector.")
     }
     
     return(counts)
@@ -112,7 +112,7 @@ checkAndDefineProp0 <- function(prop0, conditions) {
         prop0 <- (min(table(conditions))-1)/(min(table(conditions)))
     } else {
         if (prop0 <= 0 | prop0 >= 1) {
-            stop("ERROR: prop0 must be >0 and <1.")
+            stop("prop0 must be >0 and <1.")
         }
     }
     return(prop0)
@@ -127,15 +127,12 @@ checkAndDefinePercentile <- function(percentile, conditions) {
         }
     } else {
         if (percentile < 0 | percentile > 1) {
-            stop("ERROR: percentile must be comprised between 0 and 1.")
+            stop("percentile must be comprised between 0 and 1.")
         } else {
             if (percentile == 0) {
-                cat(
-                    paste(
-"WARNING: percentile == 0, the filering threshold will probably be 0, meaning
-that no filtering will be realised.\n",
-                    sep=""
-                    )
+                warning(
+"percentile == 0, the filering threshold will probably be 0, meaning that no 
+filtering will be realised."
                 )
             }
         }
@@ -145,14 +142,14 @@ that no filtering will be realised.\n",
 
 checkPropUpThresh <- function(propUpThresh) {
     if (propUpThresh <= 0 | propUpThresh > 1) {
-        stop("ERROR: propUpThresh must be >0 and <=1.")
+        stop("propUpThresh must be >0 and <=1.")
     }
 }
 
 ## Checking for presence of replicates
-ckeckForReplicates <- function(conditions){
+checkForReplicates <- function(conditions){
     if(!any(duplicated(conditions))){
-        stop("ERROR: Condition vector does not contain replicates.")
+        stop("Condition vector does not contain replicates.")
     }
 }
 
@@ -160,10 +157,8 @@ ckeckForReplicates <- function(conditions){
 checkForZeros <- function(counts) {
     nTot <- nrow(counts) * ncol(counts)
     if (table(apply(counts,1,function(vec) vec == 0))["FALSE"] == nTot) {
-        stop(
-            "ERROR: Data does not contain zero counts. 
-Sorry, SeqGate can't be applied."
-        )
+        stop("Data does not contain zero counts. Sorry, SeqGate can't be 
+applied.")
     }
 }
 

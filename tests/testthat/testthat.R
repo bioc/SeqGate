@@ -28,13 +28,13 @@ test_that("applySeqGate function gives appropriate results in normal usage", {
 })
 
 test_that("applySeqGate function gives appropriate results in extreme usage", {
-    expect_error(applySeqGate(dataNo0,cond),"ERROR: Data does not contain zero counts")
-    expect_error(applySeqGate(matrix(c(rep(c(0,10,20),6)),nrow=3,ncol=6),cond),"ERROR: Impossible to calculate the distribution of max counts.")
+    expect_error(applySeqGate(dataNo0,cond),"Data does not contain zero counts")
+    expect_error(applySeqGate(matrix(c(rep(c(0,10,20),6)),nrow=3,ncol=6),cond),"Impossible to calculate the distribution of max counts.")
 })
 
 test_that("applySeqGate function returns warning in extreme or weird situations", {
     expect_output(applySeqGate(dataDillies,cond,percentile=0),"The SeqGate filter parameters applied are")
-    expect_output(applySeqGate(dataDillies,cond,percentile=0),"WARNING")
+    expect_warning(applySeqGate(dataDillies,cond,percentile=0),"percentile == 0")
     expect_output(applySeqGate(dataDillies,cond,percentile=1),"The SeqGate filter parameters applied are")
     expect_output(applySeqGate(dataDillies,cond,propUpThresh=1),"The SeqGate filter parameters applied are")
 })
@@ -49,10 +49,8 @@ test_that("applySeqGate returns the good error messages", {
     expect_error(applySeqGate(dataDillies,cond,prop0=50),"prop0 must be >0 and <1")
     expect_error(applySeqGate(dataDillies,cond,prop0=0),"prop0 must be >0 and <1")
     expect_error(applySeqGate(dataDillies,cond,prop0=1),"prop0 must be >0 and <1")
-    expect_error(applySeqGate(dataDillies,cond,percentile=95),"ERROR: percentile must be comprised between 0 and 1.")
-    expect_error(applySeqGate(dataDillies,cond,propUpThresh=0),"ERROR: propUpThresh must be >0 and <=1.")
-    expect_error(applySeqGate(dataDillies,cond,propUpThresh=-5),"ERROR: propUpThresh must be >0 and <=1.")
-    expect_error(applySeqGate(dataDillies,badcond),"ERROR: Condition vector does not contain replicates.")
+    expect_error(applySeqGate(dataDillies,cond,percentile=95),"percentile must be comprised between 0 and 1.")
+    expect_error(applySeqGate(dataDillies,cond,propUpThresh=0),"propUpThresh must be >0 and <=1.")
+    expect_error(applySeqGate(dataDillies,cond,propUpThresh=-5),"propUpThresh must be >0 and <=1.")
+    expect_error(applySeqGate(dataDillies,badcond),"Condition vector does not contain replicates.")
 })
-
-rm(list=ls())
