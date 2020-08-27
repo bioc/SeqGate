@@ -26,10 +26,10 @@ applySeqGate <- function(readCounts, conditions, prop0=NULL, percentile=NULL,
     propUpThresh=0.9) {
     
     if (missing(readCounts)) {
-        stop("ERROR: Missing mandatory argument readCounts.")
+        stop("Missing mandatory argument readCounts.")
     }
     if (missing(conditions)) {
-        stop("ERROR: Missing mandatory argument conditions.")
+        stop("Missing mandatory argument conditions.")
     }    
     readCounts <- checkReadCounts(readCounts, conditions)
     prop0 <- checkAndDefineProp0(prop0, conditions)
@@ -44,7 +44,7 @@ applySeqGate <- function(readCounts, conditions, prop0=NULL, percentile=NULL,
         threshold <- round(quantile(vecMax, percentile))
         cat(paste("The applied threshold is ", threshold, ".\n", sep=""))
     }else{
-        stop("ERROR: Impossible to calculate the distribution of max counts.")
+        stop("Impossible to calculate the distribution of max counts.")
     }
 
     ## Applying filter
@@ -178,8 +178,13 @@ getDistMaxCounts <- function(readCounts, conditions, prop0){
         iC <- which(conditions == i)
         nb0 <- apply(readCounts[cpt0 != 0, iC], 1, function(vec) sum(vec == 0))
         iLow <- which(nb0 >= nb0Min)
-        vecMax <- c(vecMax, apply(readCounts[which(cpt0 != 0)[iLow],iC], 1, 
-            max))
+        subReadCounts <- readCounts[which(cpt0 != 0)[iLow],iC]
+        if(is.matrix(subReadCounts)){
+            vecMax <- c(vecMax, 
+                        apply(readCounts[which(cpt0 != 0)[iLow],iC], 1, max))
+        }else{
+            stop("Too few zeros along with counts in condition ",i,".")
+        }
     }
     return(vecMax)
 }
