@@ -1,2 +1,10 @@
 Changes in version 0.99.0 (2020-07-09)
 + Submitted to Bioconductor
+
+Changes in version 0.99.1 (2020-09-01)
++ Added BugReports field to the DESCRIPTION file
++ Fixed typo in checkForReplicates function name
++ Replaced cat by message, warning or stop
++ Suppressed unappropriate keywords (e.g., ERROR, WARNING) in messages
++ Replaced external datasets by generated datasets in tests
++ Suppressed rm(list=list()) in tests
