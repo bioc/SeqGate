@@ -8,3 +8,7 @@ Changes in version 0.99.1 (2020-09-01)
 + Suppressed unappropriate keywords (e.g., ERROR, WARNING) in messages
 + Replaced external datasets by generated datasets in tests
 + Suppressed rm(list=list()) in tests
+
+Changes in version 0.99.2 (2020-09-08)
++ Changed code to take SummarizedExperiment objects as input and output
++ Changed tests for this new code
