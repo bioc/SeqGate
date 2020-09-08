@@ -22,24 +22,24 @@
 ## Implements the SeqGate methods to filter lowly expressed genes
 ## -----------------------------------------------------------------------------
 
-applySeqGate <- function(readCounts, conditions, prop0=NULL, percentile=NULL,
+applySeqGate <- function(readCountsSE, assayName, colCond, prop0=NULL, percentile=NULL,
     propUpThresh=0.9) {
     
-    if (missing(readCounts)) {
-        stop("Missing mandatory argument readCounts.")
-    }
-    if (missing(conditions)) {
-        stop("Missing mandatory argument conditions.")
-    }    
-    readCounts <- checkReadCounts(readCounts, conditions)
+    if(!(is.character(assayName))){stop("assayName must be of character type")}
+    if(!(is.character(colCond))){stop("colCond must be of character type")}
+    
+    conditions <- colData(readCountsSE)[[colCond]]
+    
+    readCountsSE <- checkReadCounts(readCountsSE, assayName, colCond)
     prop0 <- checkAndDefineProp0(prop0, conditions)
     percentile <- checkAndDefinePercentile(percentile,conditions)
     checkPropUpThresh(propUpThresh)
-    checkForReplicates(conditions)
+    checkForReplicates(readCountsSE, conditions)
+    
     cat(getMessageWithParameters(prop0, percentile, propUpThresh))
 
     ## Getting the distribution of 'max' counts and computing threshold
-    vecMax <- getDistMaxCounts(readCounts,conditions,prop0)
+    vecMax <- getDistMaxCounts(readCountsSE, assayName, conditions, prop0)
     if(length(vecMax)>0){
         threshold <- round(quantile(vecMax, percentile))
         cat(paste("The applied threshold is ", threshold, ".\n", sep=""))
@@ -59,51 +59,57 @@ applySeqGate <- function(readCounts, conditions, prop0=NULL, percentile=NULL,
             function(vec,thresh)sum(vec >= thresh), thresh=threshLoc)
         if (any(countLoc >= nbUpLoc)) return(TRUE) else return(FALSE)
     }
-    filterRes<-apply(readCounts, 1, applyFilter)
+    filterRes<-apply(assay(readCountsSE,assayName), 1, applyFilter)
     
     ## Return the matrix of filtered and unfiltered genes 
-    return(list(matrixKept = readCounts[filterRes,],
-        matrixOut = readCounts[filterRes == FALSE,],
-        onFilter = as.numeric(filterRes),
-        threshold =  threshold))
+    rowData(readCountsSE)$onFilter<-filterRes
+    metadata(readCountsSE)$threshold<-threshold
+    return(readCountsSE)
 }
 
 ## -----------------------------------------------------------------------------
 ## Unexported internal functions
 ## -----------------------------------------------------------------------------
 
-## Checking readCounts type and content
-checkReadCounts <- function(counts, conditions) {
-    if(!is.matrix(counts)) {
-        if(is.data.frame(counts)){
-            isNum <- vapply(counts, is.numeric, FUN.VALUE=logical(1))
-            i <- 1
-            while(i <= length(isNum) & isNum[i]){
-                i <- i+1
-            }
-            if(i > length(isNum)){
-                counts <- as.matrix(counts)
-                message("readCounts dataframe has been converted to a matrix.")
+## Checking readCountsSE type and content
+checkReadCounts <- function(countsSE, assayName, conditions) {
+    if(is(countsSE,"SummarizedExperiment")){
+        if(length(assays(countsSE)) > 0 && 
+            !(is.null(assay(countsSE,assayName)))){
+            readCounts <- assay(countsSE,assayName)
+            if(!is.matrix(readCounts)){
+                if(is.data.frame(readCounts)){
+                    isNm <- vapply(readCounts, is.numeric, FUN.VALUE=logical(1))
+                    i <- 1
+                    while(i <= length(isNm) & isNm[i]){
+                        i <- i+1
+                    }
+                    if(i > length(isNm)){
+                        assay(countsSE,assayName) <- as.matrix(readCounts)
+                        message("assay(countsSE,",assayName,") dataframe has been 
+converted to a matrix.")
+                    }else{
+                        stop("countsSE assay contains non numeric columns.  
+Please provide a matrix of read counts.")
+                    }
+                }else{
+                    stop("assay(countsSE,",assayName,") must be a matrix or 
+data frame of read counts.")
+                }
             }else{
-                stop("readCounts contains non numeric columns. Please provide a 
-matrix of read counts.")
+                if(!is.numeric(readCounts)){
+                    stop("readCountsSE contains non numeric data. Please provide
+ a matrix of read readCounts.")
+                }
             }
         }else{
-            stop("readCounts is not a matrix.")
+            stop("No ", eval(assayName), " assay in readCountsSE.")
         }
     }else{
-        if(!is.numeric(counts)){
-            stop("readCounts contains non numeric data. Please provide a matrix 
-of read counts.")
-        }
+        stop("readCountsSE must be a SummarizedExperiment object.")
     }
-    
-    if (ncol(counts) != length(conditions)) {
-        stop("The number of columns in the readCounts matrix must be equals to 
-the number of elements in the conditions vector.")
-    }
-    
-    return(counts)
+        
+    return(countsSE)
 }
 
 ## Ckecking other arguments
@@ -147,7 +153,7 @@ checkPropUpThresh <- function(propUpThresh) {
 }
 
 ## Checking for presence of replicates
-checkForReplicates <- function(conditions){
+checkForReplicates <- function(readCountsSE, conditions){
     if(!any(duplicated(conditions))){
         stop("Condition vector does not contain replicates.")
     }
@@ -169,7 +175,8 @@ getMessageWithParameters <- function(prop0, percentile, propUpThresh) {
 }
 
 ## Getting the distribution of 'max' counts
-getDistMaxCounts <- function(readCounts, conditions, prop0){
+getDistMaxCounts <- function(readCountsSE, assayName, conditions, prop0){
+    readCounts <- assay(readCountsSE,assayName)
     checkForZeros(readCounts)
     cpt0 <- apply(readCounts,1,sum)
     vecMax <- NULL
