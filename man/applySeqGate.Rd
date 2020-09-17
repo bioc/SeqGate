@@ -11,20 +11,27 @@
 }
 
 \usage{
-    applySeqGate(readCounts, conditions, prop0 = NULL, percentile = NULL, 
-                propUpThresh = 0.9)
+    applySeqGate(readCountsSE, assayName, colCond, prop0=NULL, percentile=NULL, 
+                propUpThresh=0.9)
 }
 
 \arguments{
-    \item{readCounts}{
-        \code{matrix} of read counts, with rows corresponding to features (or 
-        other genomic features) and columns corresponding to sample libraries. 
+    \item{readCountsSE}{
+        \code{SummarizedExperiment} object including the \code{"assayName"} 
+        assay, that is a matrix of read counts. Rows corresponds to features 
+        (genes or other genomic features) and columns corresponds to sample 
+        libraries. 
         The read counts must contain zeros, as the SeqGate method is based on 
         the distribution of counts in replicates along with zero counts.
     }
-    \item{conditions}{
-        vector of biological conditions to which the samples belong to. Its 
-        length must be equal to the number of columns of the readCounts object.
+    \item{assayName}{
+        character string giving the name of the assay in \code{readCountsSE} for
+        which we want to perform the filtering.
+    }
+    \item{colCond}{
+        character string giving the name of the column describing the biological
+        conditions to which the samples belong to, in the colData DataFrame 
+        of \code{readCountsSE}.
     }
     \item{prop0}{
         minimal proportion of zeros among a condition to consider that the 
@@ -39,7 +46,6 @@
         to keep the feature. \code{propUpThresh} must be > 0 and <= 1.
     }
 }
-
 
 \details{
     In order to find a theshold value to filter lowly expressed features, 
@@ -63,21 +69,12 @@
 }
 
 \value{
-    {\code{list}} with the following elements:
-    \item{matrixKept}{
-        matrix containing the kept features, after 
-        application of the SeqGate filter (subpart of the readCounts matrix).
+    The input {\code{SummarizedExperiment}} with the following added elements{
+    \item{rowData(readCountsSE)$onFilter}{
+        vector which \code{length = nrow(readCounts)} indicating if features are
+        kept after filtering (\code{value = TRUE}) or not (\code{value = FALSE})
     }
-    \item{matrixOut}{
-        matrix containing the filtered features, after 
-        application of the SeqGate filter (subpart of the readCounts matrix).
-    }
-    \item{onFilter}{
-        vector which \code{length = nrow(readCounts)} 
-        indicating if features are filtered (\code{value = 0}) or not 
-        (\code{value = 1}).
-    }
-    \item{threshold}{
+    \item{metadata(readCountsSE)$threshold}{
         applied filter threshold.
     }
 }
@@ -86,7 +83,6 @@
 Rialle, R. et al. (2020): SeqGate: a bioconductor package to perform data-driven
 filtering of RNAseq datasets (manuscript in preparation)
 }
-    
 
 \author{
     Christelle Reynès \email{christelle.reynes@igf.cnrs.fr},\cr
@@ -95,9 +91,18 @@ filtering of RNAseq datasets (manuscript in preparation)
 
 \examples{
     # Loading of input data frame
-    data(dataTest)
-    # Definition of the condition for each sample
+    data(data_MiTF_1000genes)
+    # Annotating conditions
     cond<-c("A","A","B","B","A","B")
-    # Filtering with SeqGate
-    res <- applySeqGate(dataTest,cond)
+    # Setting the SummarizedExperiment input
+    rowData <- DataFrame(row.names=rownames(data_MiTF_1000genes))
+    colData <- DataFrame(Conditions=cond)
+    counts_strub <- SummarizedExperiment(
+                        assays=list(counts=data_MiTF_1000genes),
+                        rowData=rowData,
+                        colData=colData)
+    # Applying SeqGate
+    applySeqGate(counts_strub,"counts","Conditions")
+    # Getting the matrix of kept genes after filtering
+    keptGenes <- assay(counts_strub[counts_strub$onFilter == TRUE,])
 }

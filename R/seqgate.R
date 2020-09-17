@@ -22,8 +22,8 @@
 ## Implements the SeqGate methods to filter lowly expressed genes
 ## -----------------------------------------------------------------------------
 
-applySeqGate <- function(readCountsSE, assayName, colCond, prop0=NULL, percentile=NULL,
-    propUpThresh=0.9) {
+applySeqGate <- function(readCountsSE, assayName, colCond, prop0=NULL, 
+                         percentile=NULL, propUpThresh=0.9) {
     
     if(!(is.character(assayName))){stop("assayName must be of character type")}
     if(!(is.character(colCond))){stop("colCond must be of character type")}
