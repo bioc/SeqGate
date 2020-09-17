@@ -89,18 +89,21 @@ describing the condition of each sample in the colData dataframe, must be given.
 ### Toy dataset
 
 Let's load some toy data set. This data set is an extract from a human
-transciptome dataset produced by Strub et al. (2011). The extract counts 1,000
-genes which expression is measured in 6 samples, from 2 biological conditions
-(Dillies, M.A. et al. (2012)).
+transciptome dataset produced by Strub et al. (2011), in which human cells 
+expressing the Microphtalmia Transcription Factor (MiTF) are compared to cells 
+in which the MiTF is repressed. The extract counts 1,000 genes which expression 
+is measured in 3 samples for each biological condition (the full table of read 
+counts is available in the Supplementary materials of Dillies, M.A. et al. 
+(2012)).
 
 ```{r load_dataTest}
-data(dataTest)
-head(dataTest)
+data(data_MiTF_1000genes)
+head(data_MiTF_1000genes)
 ```
 
 And now we define a vector indicating to which biological condition each of the
-columns of dataTest come from. Here the two biological conditions are 'A' and
-'B'.
+columns of data_MiTF_1000genes come from. Here the two biological conditions are
+'A' and 'B'.
 ```{r define_cond}
 cond<-c("A","A","B","B","A","B")
 ```
@@ -112,10 +115,10 @@ object, as SeqGate needs for input. We thus need to create it, from the count
 matrix and the biological condition annotation.
 
 ```{r create_se}
-rowData <- DataFrame(row.names=rownames(dataTest))
+rowData <- DataFrame(row.names=rownames(data_MiTF_1000genes))
 colData <- DataFrame(Conditions=cond)
 counts_strub <- SummarizedExperiment(
-                        assays=list(counts=dataTest),
+                        assays=list(counts=data_MiTF_1000genes),
                         rowData=rowData,
                         colData=colData)
 ```
