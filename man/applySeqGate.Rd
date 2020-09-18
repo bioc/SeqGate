@@ -77,17 +77,21 @@
     \item{metadata(readCountsSE)$threshold}{
         applied filter threshold.
     }
+    }
 }
+
 
 \references{
 Rialle, R. et al. (2020): SeqGate: a bioconductor package to perform data-driven
 filtering of RNAseq datasets (manuscript in preparation)
 }
 
+
 \author{
     Christelle Reynès \email{christelle.reynes@igf.cnrs.fr},\cr
     Stéphanie Rialle \email{stephanie.rialle@mgx.cnrs.fr}
 }
+
 
 \examples{
     # Loading of input data frame

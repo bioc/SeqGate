@@ -86,8 +86,8 @@ checkReadCounts <- function(countsSE, assayName, conditions) {
                     }
                     if(i > length(isNm)){
                         assay(countsSE,assayName) <- as.matrix(readCounts)
-                        message("assay(countsSE,",assayName,") dataframe has been 
-converted to a matrix.")
+                        message("assay(countsSE,",assayName,") dataframe has 
+been converted to a matrix.")
                     }else{
                         stop("countsSE assay contains non numeric columns.  
 Please provide a matrix of read counts.")
@@ -98,8 +98,8 @@ data frame of read counts.")
                 }
             }else{
                 if(!is.numeric(readCounts)){
-                    stop("readCountsSE contains non numeric data. Please provide
- a matrix of read readCounts.")
+                    stop("readCountsSE contains non numeric data. Please 
+provide a matrix of read readCounts.")
                 }
             }
         }else{

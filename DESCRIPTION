@@ -13,8 +13,8 @@ Description: Filtering of lowly expressed features (e.g. genes) is a common
     the threshold above which sequenced features can be considered as
     confidently quantified.
 Encoding: UTF-8
-Imports: stats
-Depends: SummarizedExperiment, GenomicRanges
+Imports: stats, methods, BiocManager
+Depends: S4Vectors, SummarizedExperiment, GenomicRanges
 Suggests: testthat, edgeR, BiocStyle, knitr, rmarkdown
 License: GPL (>= 2.0)
 LazyData: no

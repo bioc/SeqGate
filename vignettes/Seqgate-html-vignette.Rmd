@@ -118,9 +118,9 @@ matrix and the biological condition annotation.
 rowData <- DataFrame(row.names=rownames(data_MiTF_1000genes))
 colData <- DataFrame(Conditions=cond)
 counts_strub <- SummarizedExperiment(
-                        assays=list(counts=data_MiTF_1000genes),
-                        rowData=rowData,
-                        colData=colData)
+                  assays=list(counts=data_MiTF_1000genes),
+                  rowData=rowData,
+                  colData=colData)
 ```
 
 
