@@ -48,10 +48,12 @@ analyzes the distribution of counts found in replicates along with zero counts.
 More specifically, features with a customizable minimal proportion of zeros in 
 one condition are selected. The distribution of counts found in replicates of 
 that same condition along with those zeros is computed. The chosen threshold is 
-the count value corresponding to the a customizable percentile of this 
+the count value corresponding to the customizable percentile of this 
 distribution. Finally, features having a customizable proportion (90% by 
 default) of replicates with counts below that value in all conditions are 
-filtered.
+filtered. Default value for all customizable parameters have been set through 
+extensive simulation batch testing and can be considered as adequate in most 
+situations.
 
 # Installation
 
@@ -89,11 +91,11 @@ describing the condition of each sample in the colData dataframe, must be given.
 ### Toy dataset
 
 Let's load some toy data set. This data set is an extract from a human
-transciptome dataset produced by Strub et al. (2011), in which human cells 
+transcriptome dataset produced by Strub *et al.* (2011), in which human cells 
 expressing the Microphtalmia Transcription Factor (MiTF) are compared to cells 
-in which the MiTF is repressed. The extract counts 1,000 genes which expression 
-is measured in 3 samples for each biological condition (the full table of read 
-counts is available in the Supplementary materials of Dillies, M.A. et al. 
+in which the MiTF is repressed. The extract counts 1,000 genes with expression 
+measured in 3 samples for each biological condition (the full table of read 
+counts is available in the Supplementary materials of Dillies, M.A. *et al.* 
 (2012)).
 
 ```{r load_dataTest}
@@ -101,9 +103,9 @@ data(data_MiTF_1000genes)
 head(data_MiTF_1000genes)
 ```
 
-And now we define a vector indicating to which biological condition each of the
-columns of data_MiTF_1000genes come from. Here the two biological conditions are
-'A' and 'B'.
+And now we define a vector indicating the biological condition corresponding to 
+each column of data_MiTF_1000. Here the two biological conditions are 'A' and 
+'B'.
 ```{r define_cond}
 cond<-c("A","A","B","B","A","B")
 ```
@@ -111,8 +113,8 @@ cond<-c("A","A","B","B","A","B")
 ### Getting the SummarizedExperiment input
 
 The toy dataset that we have just loaded is not yet a SummarizedExperiment
-object, as SeqGate needs for input. We thus need to create it, from the count
-matrix and the biological condition annotation.
+object, such as required in Seqgate input. We thus need to create it, 
+from the count matrix and the biological condition annotation.
 
 ```{r create_se}
 rowData <- DataFrame(row.names=rownames(data_MiTF_1000genes))
@@ -134,9 +136,9 @@ method filtering, by calling the following code:
 ```{r apply_basic}
 counts_strub <- applySeqGate(counts_strub,"counts","Conditions")
 ```
-As a result, the input SummarizedExperiment object now include a new column in
+As a result, the input SummarizedExperiment object now includes a new column in
 the rowData DataFrame, named onFilter. This column is a logical vector that
-indicates if the gene is kept after filtering (TRUE) or not (FALSE). The
+indicates if the gene should be kept after filtering (TRUE) or not (FALSE). The
 metadata of the object also include a new element, named "threshold", which
 gives the value of the applied threshold.
 
@@ -168,7 +170,7 @@ To conclude, we can see that, from the initial set of 1,000 genes,
 replicates with less than `r metadata(counts_strub)$threshold` reads are
 discarded.
 
-## Setting custom filtering parameter
+## Setting custom filtering parameters
 
 ### Parameters detailed explanation
 
@@ -197,7 +199,7 @@ flexibility, we do not simply take the maximum count of the distribution but a
 at least one condition is below 5, 'percentile' is set to 0.9. In the above
 example, the 90th percentile of the distribution of maximum counts seen 
 alongside a zero is `r metadata(counts_strub)$threshold`, and this is the 
-threshold that we will  apply in order to actually filter the lowly expressed 
+threshold that we will apply in order to actually filter the lowly expressed 
 genes.
 
 Finally, the filter is applied according to a last parameter: propUpThresh.
@@ -210,9 +212,12 @@ next integer, that is 3 in this case. Finally in this example, a gene is kept if
 all its 3 replicates have a count above `r metadata(counts_strub)$threshold`, 
 in at least one condition.
 
-### Custom filtering parameter example
+### Custom filtering parameters example
 
-One may consider that the default parameters are not suited to its experiment.
+Default value for all customizable parameters have been set through extensive 
+simulation batch testing and can be considered as adequate in most situations.
+However, one may consider that the default parameters are not suited to its 
+experiment.
 In that case, custom values can be given:
 
 ```{r apply_custom}
