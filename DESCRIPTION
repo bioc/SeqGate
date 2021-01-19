@@ -15,10 +15,16 @@ Description: Filtering of lowly expressed features (e.g. genes) is a common
 Encoding: UTF-8
 Imports: stats, methods, BiocManager
 Depends: S4Vectors, SummarizedExperiment, GenomicRanges
-Suggests: testthat, edgeR, BiocStyle, knitr, rmarkdown
+Suggests: 
+    testthat (>= 3.0.0),
+    edgeR,
+    BiocStyle,
+    knitr,
+    rmarkdown
 License: GPL (>= 2.0)
 LazyData: no
 biocViews: DifferentialExpression, GeneExpression, Transcriptomics, Sequencing, 
     RNASeq
 BugReports: https://github.com/srialle/SeqGate/issues
 VignetteBuilder: knitr
+Config/testthat/edition: 3
