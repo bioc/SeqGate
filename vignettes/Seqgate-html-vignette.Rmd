@@ -132,7 +132,7 @@ contains the biological conditions annotation. Thus, we can apply the SeqGate
 method filtering, by calling the following code:
 
 ```{r apply_basic}
-applySeqGate(counts_strub,"counts","Conditions")
+counts_strub <- applySeqGate(counts_strub,"counts","Conditions")
 ```
 As a result, the input SummarizedExperiment object now include a new column in
 the rowData DataFrame, named onFilter. This column is a logical vector that
@@ -143,7 +143,7 @@ gives the value of the applied threshold.
 Thus, to get the matrix of features intended to be kept for the downstream
 analysis:
 ```{r get_kept_features}
-keptGenes <- assay(counts_strub[counts_strub$onFilter == TRUE,])
+keptGenes <- assay(counts_strub[rowData(counts_strub)$onFilter == TRUE,])
 head(keptGenes)
 dim(keptGenes)
 ```
@@ -157,7 +157,7 @@ metadata(counts_strub)$threshold
 We can also get the matrix of filtered genes:
 
 ```{r get_filtered}
-filteredOut <- assay(counts_strub[counts_strub$onFilter == FALSE,])
+filteredOut <- assay(counts_strub[rowData(counts_strub)$onFilter == FALSE,])
 head(filteredOut)
 ```
 
@@ -216,14 +216,14 @@ One may consider that the default parameters are not suited to its experiment.
 In that case, custom values can be given:
 
 ```{r apply_custom}
-applySeqGate(counts_strub,"counts","Conditions",
+counts_strub <- applySeqGate(counts_strub,"counts","Conditions",
              prop0=1/3,
              percentile=0.8,
              propUpThresh=0.5)
 ```
 
 This time, from the initial set of 1,000 genes, 
-`r nrow(assay(counts_strub[counts_strub$onFilter == TRUE,]))` have been kept, 
+`r nrow(assay(counts_strub[rowData(counts_strub)$onFilter == TRUE,]))` have been kept, 
 after the application of a threshold of `r metadata(counts_strub)$threshold`.
 
 # SessionInfo
