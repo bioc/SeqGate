@@ -45,7 +45,7 @@ filtering of RNAseq datasets \emph{manuscript in preparation}
                         rowData=rowData,
                         colData=colData)
     # Applying SeqGate
-    applySeqGate(counts_strub,"counts","Conditions")
+    counts_strub <- applySeqGate(counts_strub,"counts","Conditions")
     # Getting the matrix of kept genes after filtering
-    keptGenes <- assay(counts_strub[counts_strub$onFilter == TRUE,])
+    keptGenes <- assay(counts_strub[rowData(counts_strub)$onFilter == TRUE,])
 }
