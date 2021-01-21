@@ -1,5 +1,7 @@
 \name{data_MiTF_1000genes}
 \alias{data_MiTF_1000genes}
+\alias{data_mitf_1000genes}
+\alias{data_MITF_1000genes}
 
 \docType{data}
 
@@ -16,12 +18,12 @@
 \format{
     A data frame with 1,000 raw gene counts on the following 6 samples.
     \describe{
-        \item{\code{A1}}{a numeric vector}: counts from sample A1 (condition A)
-        \item{\code{A2}}{a numeric vector}: counts from sample A2 (condition A)
-        \item{\code{B1}}{a numeric vector}: counts from sample B1 (condition B)
-        \item{\code{B2}}{a numeric vector}: counts from sample B2 (condition B)
-        \item{\code{A3}}{a numeric vector}: counts from sample A3 (condition A)
-        \item{\code{B3}}{a numeric vector}: counts from sample B3 (condition B)
+        \item{\code{A1}}{a numeric vector: counts from sample A1 (condition A)}
+        \item{\code{A2}}{a numeric vector: counts from sample A2 (condition A)}
+        \item{\code{B1}}{a numeric vector: counts from sample B1 (condition B)}
+        \item{\code{B2}}{a numeric vector: counts from sample B2 (condition B)}
+        \item{\code{A3}}{a numeric vector: counts from sample A3 (condition A)}
+        \item{\code{B3}}{a numeric vector: counts from sample B3 (condition B)}
     }
 }
 \details{
