@@ -17,9 +17,9 @@
 
 \arguments{
     \item{readCountsSE}{
-        \code{SummarizedExperiment} object including the \code{"assayName"} 
-        assay, that is a matrix of read counts. Rows corresponds to features 
-        (genes or other genomic features) and columns corresponds to sample 
+        \code{SummarizedExperiment} object including the \code{assayName} 
+        assay, that is a matrix of read counts. Rows correspond to features 
+        (genes or other genomic features) and columns correspond to sample 
         libraries. 
         The read counts must contain zeros, as the SeqGate method is based on 
         the distribution of counts in replicates along with zero counts.
@@ -36,14 +36,17 @@
     \item{prop0}{
         minimal proportion of zeros among a condition to consider that the 
         feature is not or lowly expressed. \code{prop0} must be > 0 and < 1.
+        See details for default setting.
     }
     \item{percentile}{
         percentile used on the 'max' distribution to determine the filtering 
-        threshold value. \code{percentile} must be >= 0 and <=1.
+        threshold value. \code{percentile} must be >= 0 and <=1. See details for
+        default setting.
     }
     \item{propUpThresh}{
         proportion of counts to be above the threshold in at least one condition
-        to keep the feature. \code{propUpThresh} must be > 0 and <= 1.
+        to keep the feature. \code{propUpThresh} must be > 0 and <= 1. See 
+        details for default setting. 
     }
 }
 
@@ -69,29 +72,26 @@
 }
 
 \value{
-    The input {\code{SummarizedExperiment}} with the following added elements{
+    The input \code{SummarizedExperiment} with the following added elements:
     \item{rowData(readCountsSE)$onFilter}{
-        vector which \code{length = nrow(readCounts)} indicating if features are
-        kept after filtering (\code{value = TRUE}) or not (\code{value = FALSE})
+        vector which \code{length = nrow(readCountsSE)} indicating if features 
+        are kept after filtering (\code{value = TRUE}) or not (\code{value = 
+        FALSE})
     }
     \item{metadata(readCountsSE)$threshold}{
         applied filter threshold.
     }
-    }
 }
-
 
 \references{
 Rialle, R. et al. (2020): SeqGate: a bioconductor package to perform data-driven
 filtering of RNAseq datasets (manuscript in preparation)
 }
 
-
 \author{
     Christelle Reynès \email{christelle.reynes@igf.cnrs.fr},\cr
     Stéphanie Rialle \email{stephanie.rialle@mgx.cnrs.fr}
 }
-
 
 \examples{
     # Loading of input data frame
