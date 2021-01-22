@@ -16,3 +16,6 @@ Changes in version 0.99.2 (2020-09-08)
 Changes in version 0.99.3 (2020-09-18)
 + Updated vignette and documentation regarding SummarizedExperiment
 + Updated NAMESPACE regarding SummarizedExperiment
+
+Changes in version 1.1.1 (2021-01-22)
++ Updated vignette and documentation to fix typos
