@@ -1,7 +1,7 @@
 Package: SeqGate
 Type: Package
 Title: Filtering of Lowly Expressed Features
-Version: 1.14.0
+Version: 1.15.0
 Date: 2021-01-22
 Authors@R: c(
     person("Christelle", "Reynès", email ="christelle.reynes@igf.cnrs.fr", role = c("aut")),
